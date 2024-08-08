@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 @if(Auth::user()->hasRole('User'))
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -36,48 +38,143 @@
                         @endif
                     </div>
                     <div class="post-actions d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-light btn-sm me-2">
-                                <i class="fa fa-thumbs-up"></i> Like
+                <div class="d-flex align-items-center">
+                <button class="btn btn-light btn-sm me-2 like-button">
+                                <i class="fa fa-thumbs-up"></i> Like (<span class="like-count">
+                                    {{ is_array($likes = json_decode($post->likes, true)) ? count($likes) : 0 }}
+                                </span>)
                             </button>
-                            <button class="btn btn-light btn-sm me-2">
-                                <i class="fa fa-comment"></i> Comment
-                            </button>
-                            <button class="btn btn-light btn-sm">
-                                <i class="fa fa-share"></i> Share
-                            </button>
-                        </div>
-                        <div>
-                            <a class="btn btn-info btn-sm" href="{{ route('posts.show', $post->id) }}">
-                                <i class="fa-solid fa-list"></i> Show
-                            </a>
-                            @can('post-edit')
-                            <a class="btn btn-primary btn-sm" href="{{ route('posts.edit', $post->id) }}">
-                                <i class="fa-solid fa-pen-to-square"></i> Edit
-                            </a>
-                            @endcan
-                            @can('post-delete')
-                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fa-solid fa-trash"></i> Delete
-                                </button>
-                            </form>
-                            @endcan
-                        </div>
-                    </div>
+                    <button class="btn btn-light btn-sm me-2 comment-button">
+                        <i class="fa fa-comment"></i> Comment
+                    </button>
+                    <button class="btn btn-light btn-sm">
+                        <i class="fa fa-share"></i> Share
+                    </button>
                 </div>
-                @endforeach
+                <div>
+                    <!-- Buttons for show, edit, delete -->
+                </div>
             </div>
+            <div class="comment-section" style="display:none;">
+    <textarea class="form-control comment-text" placeholder="Add a comment..."></textarea>
+    <button class="btn btn-primary mt-2 submit-comment">Submit Comment</button>
+    <div class="comments-list mt-3">
+        @php
+            $comments = json_decode($post->comments, true);
+            if (!is_array($comments)) {
+                $comments = [];
+            }
+        @endphp
 
-            {!! $posts->links() !!}
-
-            <p class="text-center text-primary mt-4"><small>Tutorial by ItSolutionStuff.com</small></p>
+        @foreach ($comments as $comment)
+        <div class="comment">
+            <!-- Assuming $comment is an associative array with 'text' and 'user_id' -->
+            <p>{{ $comment['text'] }}</p>
+            <small class="text-muted">Commented by user {{ $comment['user_id'] }}</small>
         </div>
+        @endforeach
     </div>
+</div>
+
+        </div>
+        @endforeach
+    </div>
+
+    {!! $posts->links() !!}
+</div>
 @endif
 @endsection
+
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Handle like button click
+    $('.like-button').on('click', function() {
+        var postId = $(this).closest('.post').data('post-id');
+        var button = $(this);
+
+        console.log('Like button clicked. Post ID: ' + postId); // Debugging line
+
+        $.ajax({
+            url: '/posts/' + postId + '/like',
+            method: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                console.log('AJAX request successful. Response:', response); // Debugging line
+                if (response.status === 'success') {
+                    button.find('.like-count').text(response.likes);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX request failed. Status:', status, 'Error:', error); // Debugging line
+            }
+        });
+    });
+});
+
+</script>
+@endpush
+
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.like-button').on('click', function() {
+        var postId = $(this).closest('.post').data('post-id');
+        var button = $(this);
+        
+        $.ajax({
+            url: '/posts/' + postId + '/like',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    button.find('.like-count').text(response.likes);
+                }
+            }
+        });
+    });
+
+    $('.comment-button').on('click', function() {
+        $(this).closest('.post').find('.comment-section').toggle();
+    });
+
+    $('.submit-comment').on('click', function() {
+        var post = $(this).closest('.post');
+        var postId = post.data('post-id');
+        var commentText = post.find('.comment-text').val();
+        
+        $.ajax({
+            url: '/posts/' + postId + '/comment',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                comment: commentText
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    var commentsList = post.find('.comments-list');
+                    commentsList.empty();
+                    response.comments.forEach(function(comment) {
+                        commentsList.append('<div class="comment"><strong>User ' + comment.user_id + ':</strong> ' + comment.text + '</div>');
+                    });
+                    post.find('.comment-text').val('');
+                }
+            }
+        });
+    });
+});
+</script>
+@endpush
+
+
 
 @push('styles')
 <style>

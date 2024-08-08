@@ -20,3 +20,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', UserController::class);
     Route::resource('posts', PostController::class);
 });
+
+
+// Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
+
+
+Route::post('/posts/{post}/comment', [PostController::class, 'comment'])->name('posts.comment');

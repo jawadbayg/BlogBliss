@@ -35,4 +35,30 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function toggleLike($userId)
+{
+    $likedUsers = $this->likes ? json_decode($this->likes, true) : [];
+    if (in_array($userId, $likedUsers)) {
+        // Unlike
+        $likedUsers = array_diff($likedUsers, [$userId]);
+    } else {
+        // Like
+        $likedUsers[] = $userId;
+    }
+    $this->likes = json_encode($likedUsers);
+    $this->save();
+}
+
+public function addComment($userId, $commentText)
+{
+    $comments = $this->comments ? json_decode($this->comments, true) : [];
+    $comments[] = [
+        'user_id' => $userId,
+        'text' => $commentText,
+        'created_at' => now(),
+    ];
+    $this->comments = json_encode($comments);
+    $this->save();
+}
+
 }

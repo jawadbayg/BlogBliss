@@ -143,4 +143,53 @@ public function update(Request $request, Post $post): RedirectResponse
         return redirect()->route('posts.index')
                         ->with('success', 'Post deleted successfully.');
     }
+
+    public function like($postId)
+    {
+        $post = Post::findOrFail($postId);
+        $userId = auth()->id(); // Get the currently authenticated user's ID
+    
+        $likes = json_decode($post->likes, true) ?? [];
+    
+        if (in_array($userId, $likes)) {
+            // User has already liked the post, so remove their like
+            $likes = array_diff($likes, [$userId]);
+        } else {
+            // User has not liked the post yet, so add their like
+            $likes[] = $userId;
+        }
+    
+        $post->likes = json_encode($likes);
+        $post->save();
+    
+        return response()->json([
+            'status' => 'success',
+            'likes' => count($likes)
+        ]);
+    }
+    
+    
+    public function comment(Request $request, Post $post)
+    {
+        $request->validate([
+            'comment' => 'required|string|max:255',
+        ]);
+    
+        $user = auth()->user();
+        $comments = json_decode($post->comments, true) ?? [];
+        $comment = [
+            'text' => $request->input('comment'),
+            'user_id' => $user->id
+        ];
+        
+        $comments[] = $comment;
+        $post->comments = json_encode($comments);
+        $post->save();
+    
+        return response()->json([
+            'status' => 'success',
+            'comments' => $comments
+        ]);
+    }
+    
 }
