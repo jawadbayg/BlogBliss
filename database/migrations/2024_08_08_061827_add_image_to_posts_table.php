@@ -14,11 +14,11 @@ class AddImageToPostsTable extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            if (!Schema::hasColumn('posts', 'image')) {
-                $table->string('image')->nullable()->after('text');
-            }
+            $table->string('image')->nullable()->after('text');
         });
     }
+ 
+    
 
     /**
      * Reverse the migrations.

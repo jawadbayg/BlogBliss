@@ -49,20 +49,35 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): RedirectResponse
+    
+    public function store(Request $request)
     {
+        // Validate the request
         $request->validate([
             'text' => 'required',
-            'image' => 'nullable|image', // Optional field for image
-            'likes' => 'nullable|integer',
-            'comments' => 'nullable|array', // Assuming comments are sent as an array
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        Post::create($request->all());
-
-        return redirect()->route('posts.index')
-                        ->with('success', 'Post created successfully.');
+    
+        // Handle the file upload
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('images', 'public'); // Store in storage/app/public/images
+        }
+    
+        // Create the post
+        $post = new Post([
+            'text' => $request->input('text'),
+            'image' => $imagePath,
+            'likes' => $request->input('likes', 0),
+            'comments' => $request->input('comments'),
+        ]);
+    
+        $post->save();
+    
+        return redirect()->route('posts.index')->with('success', 'Post created successfully.');
     }
+    
 
     /**
      * Display the specified resource.

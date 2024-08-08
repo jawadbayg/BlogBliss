@@ -34,11 +34,10 @@
         <td>{{ ++$i }}</td>
         <td>{{ $post->text }}</td>
         <td>
-            @if($post->image)
-                <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" style="max-width: 100px;">
-            @else
-                No Image
-            @endif
+        @if($post->image)
+    <img src="{{ asset('storage/' . $post->image) }}" alt="Image" style="max-width: 100%; height: auto;">
+@endif
+
         </td>
         <td>{{ $post->likes }}</td>
         <td>

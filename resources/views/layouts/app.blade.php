@@ -51,7 +51,7 @@
                                 </li>
                             @endif
                         @else
-                        @if(Auth::user()->HasRole('Admin'))
+                            @if(Auth::user()->HasRole('Admin'))
                             <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
                             <li><a class="nav-link" href="{{ route('roles.index') }}">Manage Role</a></li>
                             @endif
