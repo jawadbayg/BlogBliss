@@ -15,7 +15,7 @@ class Post extends Model
      * @var array
      */
     protected $fillable = [
-        'text', 'image', 'likes', 'comments'
+        'user_id', 'text', 'image', 'likes', 'comments'
     ];
 
     /**
@@ -25,6 +25,14 @@ class Post extends Model
      */
     protected $casts = [
         'likes' => 'integer',
-        'comments' => 'array', // If storing comments as JSON, cast it to array
+        'comments' => 'array',
     ];
+
+    /**
+     * Get the user that owns the post.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

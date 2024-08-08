@@ -49,35 +49,56 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    
     public function store(Request $request)
-    {
-        // Validate the request
-        $request->validate([
-            'text' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-    
-        // Handle the file upload
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imagePath = $image->store('images', 'public'); // Store in storage/app/public/images
-        }
-    
-        // Create the post
-        $post = new Post([
-            'text' => $request->input('text'),
-            'image' => $imagePath,
-            'likes' => $request->input('likes', 0),
-            'comments' => $request->input('comments'),
-        ]);
-    
-        $post->save();
-    
-        return redirect()->route('posts.index')->with('success', 'Post created successfully.');
+{
+    // Validate the request
+    $request->validate([
+        'text' => 'required',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Handle the file upload
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imagePath = $image->store('images', 'public');
     }
-    
+
+    // Create the post with the logged-in user's ID
+    $post = new Post([
+        'user_id' => auth()->id(), // Assuming you're using Laravel's built-in auth system
+        'text' => $request->input('text'),
+        'image' => $imagePath,
+        'likes' => $request->input('likes', 0),
+        'comments' => $request->input('comments'),
+    ]);
+
+    $post->save();
+
+    return redirect()->route('posts.index')->with('success', 'Post created successfully.');
+}
+
+public function update(Request $request, Post $post): RedirectResponse
+{
+    $request->validate([
+        'text' => 'required',
+        'image' => 'nullable|image',
+        'likes' => 'nullable|integer',
+        'comments' => 'nullable|array',
+    ]);
+
+    // Ensure the user is authorized to update the post
+    if ($post->user_id !== auth()->id()) {
+        return redirect()->route('posts.index')
+                         ->with('error', 'Unauthorized action.');
+    }
+
+    $post->update($request->all());
+
+    return redirect()->route('posts.index')
+                    ->with('success', 'Post updated successfully.');
+}
+
 
     /**
      * Display the specified resource.
@@ -108,20 +129,6 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post): RedirectResponse
-    {
-        $request->validate([
-            'text' => 'required',
-            'image' => 'nullable|image', // Optional field for image
-            'likes' => 'nullable|integer',
-            'comments' => 'nullable|array', // Assuming comments are sent as an array
-        ]);
-
-        $post->update($request->all());
-
-        return redirect()->route('posts.index')
-                        ->with('success', 'Post updated successfully.');
-    }
 
     /**
      * Remove the specified resource from storage.

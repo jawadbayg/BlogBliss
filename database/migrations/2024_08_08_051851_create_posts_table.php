@@ -15,11 +15,15 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->text('text'); // Field for post text
-            $table->string('image')->nullable(); // Field for image URL (nullable in case there is no image)
-            $table->unsignedInteger('likes')->default(0); // Field for likes count
-            $table->text('comments')->nullable(); // Field for comments (you may want to store JSON or serialized data)
+            $table->unsignedBigInteger('user_id'); // Foreign key for user
+            $table->text('text');
+            $table->string('image')->nullable();
+            $table->unsignedInteger('likes')->default(0);
+            $table->text('comments')->nullable();
             $table->timestamps();
+
+            // Add foreign key constraint
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
