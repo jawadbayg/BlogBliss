@@ -25,4 +25,8 @@ Route::group(['middleware' => ['auth']], function() {
 // Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
 
 
-Route::post('/posts/{post}/comment', [PostController::class, 'comment'])->name('posts.comment');
+// Route::post('/posts/{post}/comment', [PostController::class, 'comment'])->name('posts.comment');
+
+Route::post('users/{id}/accept', [UserController::class, 'accept'])->name('users.accept');
+Route::delete('users/{id}/reject', [UserController::class, 'reject'])->name('users.reject');
+

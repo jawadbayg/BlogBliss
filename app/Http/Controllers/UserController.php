@@ -56,6 +56,7 @@ class UserController extends Controller
     
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
+        $input['isFalse'] = false;  // Set isFalse to false initially
     
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
@@ -63,6 +64,7 @@ class UserController extends Controller
         return redirect()->route('users.index')
                         ->with('success','User created successfully');
     }
+    
     
     /**
      * Display the specified resource.
@@ -137,4 +139,26 @@ class UserController extends Controller
         return redirect()->route('users.index')
                         ->with('success','User deleted successfully');
     }
+
+
+    public function accept($id): RedirectResponse
+{
+    $user = User::find($id);
+    $user->isFalse = true;
+    $user->save();
+
+    return redirect()->route('users.index')
+                     ->with('success', 'User accepted successfully');
+}
+
+public function reject($id): RedirectResponse
+{
+    $user = User::find($id);
+    $user->delete(); // Optionally delete the user
+
+    return redirect()->route('users.index')
+                     ->with('success', 'User rejected successfully');
+}
+
+
 }
