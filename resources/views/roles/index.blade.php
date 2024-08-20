@@ -1,10 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+
+@if(Auth::user()->HasRole('Admin'))
+@include('partials.admin-nav')
+
+<div class="container">
 <div class="row">
     <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Role Management</h2>
+    <div class="col-lg-12 text-center">
+            <h2 style="font-family: 'Barlow Semi Condensed', sans-serif;">Manage Roles</h2>
         </div>
         <div class="pull-right">
         @can('role-create')
@@ -48,8 +53,9 @@
     </tr>
     @endforeach
 </table>
+</div>
 
 {!! $roles->links('pagination::bootstrap-5') !!}
 
-<p class="text-center text-primary"><small>Tutorial by ItSolutionStuff.com</small></p>
 @endsection
+@endif

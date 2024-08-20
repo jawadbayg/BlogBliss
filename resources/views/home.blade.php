@@ -1,31 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
+@if(Auth::user()->hasRole('Admin'))
 
-@if(Auth::check() && !Auth::user()->isFalse)
-    <div class="alert alert-warning" role="alert">
-        Your application is under review.
-    </div>
-@else
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
-
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
-                        {{ __('You are logged in!') }}
-                    </div>
-                </div>
-            </div>
+@include('partials.admin-nav')
+<!-- 
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Total Users
+        </div>
+        <div class="card-body text-center">
+            <h3>{{ $userCount }}</h3>
         </div>
     </div>
-@endif
+</div> -->
 
+@else
+    @if(Auth::check() && !Auth::user()->isFalse)
+        <div class="alert alert-warning" role="alert">
+            Your application is under review.
+        </div>
+    @else
+        <div class="container">
+            <h1>User Dashboard</h1>
+            <a href="{{ route('posts.index') }}" class="btn btn-primary">Manage posts</a>
+        </div>
+    @endif
+@endif
 @endsection

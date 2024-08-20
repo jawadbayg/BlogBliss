@@ -13,16 +13,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id'); // Foreign key for user
-            $table->text('text');
-            $table->string('image')->nullable();
-            $table->unsignedInteger('likes')->default(0);
-            $table->text('comments')->nullable();
+        Schema::table('posts', function (Blueprint $table) {
+            // Add new columns
+            $table->string('title'); // New field for post title
+            $table->text('text'); // Field for the post content
+            $table->string('images')->nullable();// Field for storing multiple images (as JSON)
+            $table->json('likes')->default(json_encode([])); // Store likes as JSON array
+            $table->json('comments')->nullable(); // Store comments as JSON array
+            $table->string('tags')->nullable(); // Field for tags or categories (as a comma-separated string or JSON array)
+            $table->string('status')->default('pending'); // New field for status with a default value of 'pending'
             $table->timestamps();
 
-            // Add foreign key constraint
+            // Ensure 'user_id' foreign key constraint
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
@@ -34,6 +36,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::table('posts', function (Blueprint $table) {
+            // Drop columns if rolling back
+            $table->dropColumn('title');
+            $table->dropColumn('text');
+            $table->dropColumn('images');
+            $table->dropColumn('likes');
+            $table->dropColumn('comments');
+            $table->dropColumn('tags');
+            $table->dropColumn('status');
+        });
     }
 };

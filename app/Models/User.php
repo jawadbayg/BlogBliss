@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'isFalse',
+        'profile_pic',
     ];
 
     /**
@@ -49,4 +51,38 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+    
+    // app/Models/User.php
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id');
+    }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
+    }
+
+    public function follow(User $user)
+    {
+        $this->following()->attach($user->id);
+    }
+
+    public function unfollow(User $user)
+    {
+        $this->following()->detach($user->id);
+    }
+
+    public function isFollowing(User $user)
+    {
+        return $this->following->contains($user);
+    }
+    
+
 }

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
 <div class="row">
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
@@ -14,6 +15,7 @@
 
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
+    @if($user)
         <div class="form-group">
             <strong>Name:</strong>
             {{ $user->name }}
@@ -26,14 +28,20 @@
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Roles:</strong>
-            @if(!empty($user->getRoleNames()))
-                @foreach($user->getRoleNames() as $v)
-                    <label class="badge badge-success">{{ $v }}</label>
-                @endforeach
-            @endif
-        </div>
+    <div class="form-group">
+    <strong>Roles:</strong>
+    @if(!empty($user->getRoleNames()))
+        @foreach($user->getRoleNames() as $v)
+            <span class="badge" style="background-color: #28a745; color: #fff;">{{ $v }}</span> 
+        @endforeach
+    @endif
+
+</div>
+
     </div>
+    @else
+            <p>User not found.</p>
+        @endif
+</div>
 </div>
 @endsection

@@ -1,0 +1,865 @@
+/* General Styles */
+header.welcome-page-style {
+    width: 100%;
+    height: 400px; 
+    background-size: cover;
+    display: flex; 
+    background-repeat: no-repeat; 
+    margin: 0;
+    padding: 0;
+    flex-direction: column; 
+    align-items: flex-start; 
+    justify-content: center; 
+}
+.body{
+   padding-left: 20px;
+}
+
+
+.admin-container {
+    display: flex;
+}
+
+
+.main-content {
+    flex: 1;
+    padding: 15px;
+}
+
+
+/* Adjust content margin when sidebar is visible */
+.content {
+    margin-left: 0; /* Default value when sidebar is hidden */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Smooth transition for content margin */
+}
+
+
+
+.thin-line {
+    border-top: 1px solid #ddd; /* Light gray line */
+    margin: 20px 0; /* Space above and below the line */
+}
+
+#login-btn{
+    border: solid;
+    color:black;
+    border-radius: 30px;
+    width: 80px;
+    justify-content: center;
+}
+#login-btn:hover{
+    background-color: black;
+    color: white;
+    border: solid;
+}
+#aboutus-btn {
+    margin-right: 15px;
+    position: relative;
+    display: inline-block;
+    text-decoration: none; /* Remove the default underline */
+    color: inherit; /* Ensure the color is inherited */
+}
+
+#aboutus-btn::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px; /* Line thickness */
+    background-color: black; /* Line color */
+    transition: width 0.3s ease; /* Animation speed and easing */
+}
+
+#aboutus-btn:hover::after {
+    width: 100%; /* Full width of the text */
+}
+
+.container-feature-posts{
+    background-color: #000;
+    
+}
+.fp-title{
+    color: white;
+    line-height: 3.5rem;
+    font-size: 3.5rem; /* Adjust size as needed */
+    font-weight: bold;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.fp-text{
+    color: white;
+    text-align: justify;
+    font-size: 16px;
+}
+.fp-header{
+    padding-top: 30px;
+    font-size: 16px;
+    color: rgb(130, 130, 130);
+}
+
+.header-heading {
+    margin-left: 3rem; 
+    text-align: left; 
+}
+
+.header-heading h1 {
+    font-family: 'Amita', cursive;
+    margin: 0;
+    padding: 0; 
+    font-size: 17vh;
+    font-weight: bolder; 
+    color: black; 
+}
+
+.subtitle {
+    margin-left: 3rem;
+    font-size: 4vh;
+    font-weight: 500; 
+    color: black; 
+    padding: 0;
+    text-align: left;
+}
+
+.start-reading-button {
+    margin-left: 3rem;
+    padding: 0.7rem 1.2rem; 
+    background-color: black;
+    color: white; 
+    border: none; 
+    border-radius: 50px;
+    
+    font-size: 1rem;
+    font-weight: 500; 
+    text-align: center; 
+    text-decoration: none;
+    cursor: pointer; 
+    transition: background-color 0.3s, transform 0.3s; 
+}
+.readfull {
+    padding: 0.7rem 1.2rem; 
+    background-color: white;
+    color: black; 
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 500; 
+    text-align: center; 
+    text-decoration: none;
+    cursor: pointer; 
+    transition: background-color 0.3s, transform 0.3s; 
+}
+.readfull:hover{
+    border-color: white;
+    border: solid;
+    background-color: black;
+    color: white;
+    transform: scale(1.05); 
+}
+
+
+.start-reading-button:hover {
+    border-color: black;
+    border: solid;
+    background-color: white;
+    font-weight: bolder;
+    color: black;
+    transform: scale(1.05); 
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    header.welcome-page-style {
+        height: auto;
+        padding: 2rem;
+    }
+
+    .header-heading {
+        margin-left: 1rem;
+        text-align: center; 
+        margin-bottom: 1rem;
+    }
+
+    .header-heading h1 {
+        font-size: 10vh;
+        text-align: center;
+    }
+
+    .subtitle {
+        margin-left: 1rem; 
+        font-size: 3vh;
+        text-align: center;
+    }
+
+    .start-reading-button {
+        margin-left: 1rem; 
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem; 
+    }
+}
+
+@media (max-width: 480px) {
+    .header-heading h1 {
+        font-size: 8vh; 
+    }
+
+    .subtitle {
+        font-size: 2.5vh; 
+    }
+
+    .start-reading-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem; 
+    }
+}
+
+
+
+
+#blogbliss-link {
+    text-decoration: none; /* Remove underline from link */
+    color: inherit; /* Inherit color from parent */
+}
+
+#blogbliss {
+    font-family: "Englebert", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 7vh;
+}
+
+
+#main-content {
+    margin-left: 200px; 
+    padding: 2rem;
+}
+#loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.4em;
+}
+
+
+/* Ensure that images are appropriately sized and aligned */
+.post-image {
+    max-width: 150px; /* Adjust size as needed */
+    max-height: 150px; /* Adjust size as needed */
+    object-fit: cover; /* Ensure images are nicely cropped */
+}
+
+/* Style for the post title to be large */
+.post-title {
+    font-size: 2.5rem; /* Adjust size as needed */
+    font-weight: bold;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 0.5rem; /* Adjust spacing */
+}
+.post-title-show {
+    font-size: 3rem; /* Adjust size as needed */
+    font-weight: bold;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 0.5rem; /* Adjust spacing */
+}
+
+/* Style for the post text to be smaller */
+.post-text {
+    font-size: 0.975rem; /* Adjust size as needed */
+    color: #555; /* Optional: Adjust text color */
+}
+
+/* Align post items in a flex container */
+.post {
+    display: flex;
+    align-items: flex-start; /* Align items to start */
+    border-bottom: 1px solid #ddd; /* Optional: Add border for separation */
+    padding-bottom: 1rem; /* Add padding below each post */
+}
+
+.feed {
+    list-style: none; /* Remove bullet points */
+    padding: 0;
+    margin: 0;
+}
+
+.d-flex {
+    display: flex;
+}
+.flex-grow-1 {
+    flex-grow: 1;
+}
+.ml-3 {
+    margin-left: 1rem;
+}
+
+
+.post {
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    padding: 1rem;
+    background-color: #ffffff;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    margin-bottom: .5rem;
+}
+
+/* Default color for the like button */
+.like-container i {
+    color: black;
+    cursor: pointer;
+}
+
+/* Color when the button is liked */
+.like-container i.liked {
+    color: blue;
+}
+
+
+
+/* CSS to remove the default link styling and card-like appearance */
+.post-link {
+    text-decoration: none; /* Remove underline */
+    color: #000; /* Black text color */
+}
+
+.post-link:hover {
+    text-decoration: none; /* Ensure no underline on hover */
+}
+
+.post {
+    border: none; /* Remove border */
+    background: none; /* Remove background color */
+    padding: 0; /* Remove padding */
+    margin-bottom: 1rem; /* Adjust spacing as needed */
+}
+
+.post-image {
+    width: 100px; /* Set a fixed width or adjust as needed */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* In your main stylesheet (e.g., app.css or custom.css) */
+
+
+
+.row {
+    /* Ensures that the row is aligned to the left */
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.post-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #fff;
+    display: flex;
+    align-items: center; /* Center items vertically */
+    overflow: hidden;
+    max-height: 300px; /* Limit card height */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.post-text-content {
+    flex: 1;
+    margin-right: 16px;
+}
+
+.post-image-container-index {
+    flex-shrink: 0;
+    width: 180px; /* Adjust size as needed */
+    height: 180px; /* Make sure this is the same as width for square image */
+    overflow: hidden;
+    border-radius: 20px;
+    display: flex; /* Enable flexbox layout */
+    align-items: center; /* Center image vertically */
+    justify-content: center; /* Center image horizontally */
+}
+
+.post-image {
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the container without distortion */
+}
+
+.post-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-title {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+}
+
+.post-text-index {
+    font-size: 1rem;
+    color: #333;
+}
+
+#user-pic-welcome{
+    width: 150px;
+    height: 150px;
+}
+/* Ensure the row is centered */
+
+/* Adjust post container size */
+/* Adjust post container size */
+
+/* Adjust post container size */
+/* Adjust post container size */
+.col-lg-8 {
+    width: 100%;
+    max-width: 800px; /* Adjust as needed for the desired max width */
+    margin: 0 auto; /* Center horizontally */
+}
+
+/* Image container should have fixed dimensions */
+.post-image-container {
+    width: 200px; /* Fixed width */
+    height: 400px; /* Fixed height */
+    overflow: hidden; /* Hide any overflowed content */
+    display: flex; /* Center the image */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    position: relative; /* Positioning context for the image */
+    background-color: #f8f9fa; /* Optional: background color for better visibility */
+}
+
+.post-image-container img {
+    width: 100%; /* Ensure the image scales to the container width */
+    height: 100%; /* Ensure the image scales to the container height */
+    object-fit: cover; /* Ensure the image covers the container without distortion */
+    display: block; /* Prevent inline spacing issues */
+}
+
+.post-image-show {
+    width: 100%; /* Ensure the container takes full width */
+    margin-bottom: 1rem; /* Adjust bottom margin as needed */
+  
+}
+
+
+.post-image-show img {
+    width: 100%; /* Ensure the image scales to the container width */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Prevent inline spacing issues */
+    object-fit: cover; /* Ensure the image covers the container */
+    max-height: 100%; /* Ensure image does not exceed container height */
+}
+
+
+
+
+.user-avatar {
+    margin-right: 10px;
+    width: 50px; /* Adjust the size as needed */
+    height: 50px; /* Adjust the size as needed */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the area */
+}
+
+.navbar {
+    margin-right:1rem;
+    margin-left:1rem; /* Adjust padding as needed */
+}
+
+.post-text-index {
+    /* Ensures that the text is truncated to a maximum of 2 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+}
+.post-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 10pxs;
+    background-color: #fff;
+    text-decoration: none;
+    color: #333;
+}
+
+.post-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.comment-actions {
+    font-size: 0.8rem;
+}
+
+.comment-actions a,
+.comment-actions button {
+    display: inline;
+}
+
+.comment-actions i {
+    font-size: 1.2rem;
+}
+
+
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.search-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid #ced4da;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    transition: border-color 0.2s ease;
+}
+.search-input:focus {
+    border-color: rgb(27, 27, 27);
+    outline: none;
+}
+.search-button {
+    background-color: rgb(27, 27, 27);
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.search-button:hover {
+    background-color:black;
+}
+.clear-button {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.clear-button:hover {
+    background-color: #e0e0e0;
+}
+
+
+.truncate {
+    max-width: 150px; /* Adjust the width as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Optional: Style for the table and images */
+.table td, .table th {
+    vertical-align: middle;
+}
+
+.table img {
+    max-width: 100px;
+    height: auto;
+}
+
+
+.testimonialsHeading{
+    font-size: 30px;
+    color: white;
+    padding-bottom: 20px;
+}
+
+
+.container {
+    width: 100%;
+    padding: 20px;
+}
+
+.user-deck {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 80px; 
+}
+
+.user-card {
+    text-align: center;
+    margin: 0;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+#user-avatar-welcome {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.user-name {
+    font-size: 1.25rem;
+    color: #ffffff; /* Dark color for the name */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#user-text {
+    color: #9c9c9c;
+    font-size: 1rem;
+    text-align: center; /* Center the text */
+    margin: 0; /* Remove default margin */
+    line-height: 1.5; /* Line height for better readability */
+}
+
+
+.sidebar {
+    background-color: rgb(255, 255, 255);
+    display: flex; 
+    flex-wrap: wrap;
+    gap: 10px; 
+    align-items: center; 
+    padding: 20px;
+    height: auto; 
+    box-sizing: border-box; 
+    width: 250px; 
+    overflow-y: auto;
+}
+
+.sidebar-button {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50px;
+    color: black;
+    padding: 4px 20px; 
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer; 
+}
+
+
+.sidebar-button.active {
+    background-color: black;
+    color: white;
+}
+
+
+/* Style for the clear filter button */
+.clear-filter-button {
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 50px;
+    color: black;
+    padding: 0px;
+    text-align: center;
+    display: inline-flex; /* Use inline-flex to align items horizontally */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    min-width: 150px; /* Ensure enough width for text and icon */
+}
+
+/* Add cross icon before the text */
+.clear-filter-button::before {
+    content: "\00D7"; /* Unicode for cross (×) */
+    font-size: 20px; /* Adjust size as needed */
+    margin-right: 8px; /* Space between icon and text */
+}
+
+.staff-picks {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.staff-pick-item {
+    margin-bottom: 15px; /* Space between items */
+}
+
+.user-info {
+    display: flex; /* Align items in a row */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 5px; /* Space between user info and post title */
+}
+
+#user-avatar-staffpicks {
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    border-radius: 50%; /* Circular avatar */
+    object-fit: cover; /* Ensure the image covers the container */
+    margin-right: 10px; /* Space between avatar and name */
+}
+
+.user-name {
+    margin: 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.post-title {
+    margin: 0;
+    
+    font-size: 16px;
+}
+
+.post-title a {
+    color: #000000; /* Color for the clickable post title */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold;
+}
+
+.post-title a:hover {
+    text-decoration: underline; /* Optional: underline on hover */
+}
+
+.staff-pick-item img:last-of-type {
+    max-width: 100px;
+    margin-top: 5px;
+}
+
+    #follow-btn{
+        color: black;
+        border: 1.5px solid black;
+        font-weight: 700;
+        border-radius: 30px;
+    }
+    #follow-btn:hover{
+        color: white;
+        background-color: black;
+    }
+
+    #unfollow-btn{
+        color: black;
+        border: 1.5px solid black;
+        font-weight: 700;
+        border-radius: 30px;
+    }
+    #unfollow-btn:hover{
+        color: white;
+        background-color: black;
+    }
+
+#post-create-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%; /* Make the button full-width */
+    background-color: black; /* Black background */
+    color: white; /* White text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Optional: Add some border-radius */
+    padding: 10px 0; /* Add padding for height */
+    font-size: 16px; /* Increase font size for better readability */
+    font-weight: 600; /* Make the text bold */
+    text-align: center; /* Center the text */
+}
+
+#post-create-btn:hover {
+    background-color: #333; /* Darker shade on hover */
+    color: white; /* Keep the text white on hover */
+}
+
+#b-textarea{
+    margin-top: 20px;
+}
+
+/* Floating Button */
+.floating-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 8px; /* Adjust for text */
+    width: auto; /* Change width to auto to fit text */
+    padding: 10px 20px; /* Add padding for better spacing */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-size: 14px; /* Adjust font size as needed */
+    z-index: 1000;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Adjust for hover effect */
+.floating-button:hover {
+    background-color: #282828;
+    color: #fff;
+}
+#btn-AI{
+    width: 80px;
+    border-radius: 7px;
+    border: none;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.chat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #cecece;
+    border-radius: 5px;
+    height: 400px; /* Adjust as needed */
+    overflow-y: auto; /* Scrollable */
+    background-color: #977e7e; /* Background color */
+}
+
+.chat-message {
+    display: flex;
+    align-items: center;
+}
+
+.user-message {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.bot-response {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.typing-container {
+    display: inline;
+    white-space: pre-wrap; /* Preserve whitespace and new lines */
+    position: relative;
+}
+
+.typing-container::after {
+    content: '|';
+    position: absolute;
+    right: 0;
+    animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}

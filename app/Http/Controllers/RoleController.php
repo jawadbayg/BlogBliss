@@ -10,7 +10,9 @@ use Spatie\Permission\Models\Permission;
 use DB;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-    
+use App\Models\User;
+use App\Models\Post;
+
 class RoleController extends Controller
 {
     /**
@@ -18,13 +20,7 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    function __construct()
-    {
-         $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-         $this->middleware('permission:role-create', ['only' => ['create','store']]);
-         $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:role-delete', ['only' => ['destroy']]);
-    }
+  
     
     /**
      * Display a listing of the resource.
@@ -32,9 +28,13 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request): View
-    {
+    {     
+        $userCount = User::count();
+        $postCount = Post::count();
+        $pendingCount = User::where('isFalse', 0)->count();
+        $pendingPost = Post::where('status', 'pending')->count();
         $roles = Role::orderBy('id','DESC')->paginate(5);
-        return view('roles.index',compact('roles'))
+        return view('roles.index',compact('roles','userCount','postCount','pendingCount','pendingPost'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
     
@@ -82,6 +82,7 @@ class RoleController extends Controller
     public function show($id): View
     {
         $role = Role::find($id);
+        
         $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
             ->where("role_has_permissions.role_id",$id)
             ->get();
