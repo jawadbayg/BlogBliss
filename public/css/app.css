@@ -863,3 +863,24 @@ header.welcome-page-style {
         opacity: 0;
     }
 }
+
+
+#btn-comment{
+    background-color: #000;
+    color: white;
+}
+
+.actions-column {
+    width: 200px; /* Set the desired width */
+    padding: 10px; /* Add padding inside the column */
+}
+
+.actions-column .btn {
+    width: 50px; /* Set the desired width for buttons */
+    text-align: center; /* Center text and icons inside the button */
+    margin-right: 5px; /* Add margin between buttons */
+}
+
+.btn i {
+    vertical-align: middle; /* Align icon vertically in the middle */
+}

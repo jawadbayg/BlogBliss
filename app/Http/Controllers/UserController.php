@@ -65,6 +65,7 @@ class UserController extends Controller
                     return $acceptButton . $rejectButton . $showButton . $editButton . $deleteButton;
                 })
                 
+                
                  ->rawColumns(['roles', 'status', 'action'])
                  ->make(true);
          }

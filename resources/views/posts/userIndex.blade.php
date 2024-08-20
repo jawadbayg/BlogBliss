@@ -20,7 +20,7 @@
                     <tr>
                         <th>Post Title</th>
                         <th>Description</th>
-                        <th>Actions</th>
+                        <th class="actions-column">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,13 +29,17 @@
                             <td>{{ $post->title }}</td>
                             <td>{{ \Illuminate\Support\Str::limit(strip_tags($post->text), 200, '...') }}</td>
                             <!-- <td>{{ Str::limit( $post->text, 100 ) }}</td> -->
-                            <td>
-                                <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary btn-sm">View</a>
-                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-secondary btn-sm">Edit</a>
+                            <td class="actions-column">
+                                <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
                                 <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this post?')">Delete</button>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this post?')">
+    <i class="fa fa-trash"></i>
+</button>
+
+
                                 </form>
                             </td>
                         </tr>

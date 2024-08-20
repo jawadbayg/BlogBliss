@@ -74,7 +74,7 @@
                         <div class="form-group">
                             <textarea name="text" class="form-control" placeholder="Add a comment..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary" id="btn-comment">Submit</button>
                     </form>
                 </div>
                 @else

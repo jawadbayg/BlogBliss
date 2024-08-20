@@ -53,7 +53,8 @@
                     <th>Email</th>
                     <th>Roles</th>
                     <th>Status</th>
-                    <th width="280px">Action</th>
+                    <th>Actions</th>
+
                 </tr>
             </thead>
             <tbody>
