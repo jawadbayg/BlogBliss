@@ -40,28 +40,154 @@
         </div>
 
         <div class="form-group d-flex justify-content-between" id="b-textarea">
-            <div class="col-md-8 pr-2">
-                <label for="tags">Tags:</label>
-                <select name="tags[]" class="form-control" multiple>
-                    <option value="science">Science</option>
-                    <option value="technology">Technology</option>
-                    <option value="art">Art</option>
-                    <option value="fun">Fun</option>
-                    <option value="education">Education</option>
-                    <option value="kids">Kids</option>
-                    <option value="business">Business</option>
-                    <option value="selfImprovement">Self Improvement</option>
-                    <option value="health">Health</option>
-                </select>
-            </div>
+        <div class="col-md-8 pr-2">
+    <label>Tags:</label>
+    <div class="tags-checkboxes">
+        <!-- Science Checkbox -->
+        <div class="checkbox-wrapper-30 ">
+            <span class="checkbox">
+                <input type="checkbox" name="tags[]" value="science" id="tag-science" />
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+            </span>
+            <label for="tag-science">Science</label>
+        </div>
 
-            <div class="col-md-4 pl-2">
-                <label for="audience">Audience:</label>
-                <select name="audience" class="form-control">
-                    <option value="public">Public</option>
-                    <option value="followers">Followers</option>
-                </select>
-            </div>
+        <!-- Technology Checkbox -->
+        <div class="checkbox-wrapper-30 mt-1">
+            <span class="checkbox">
+                <input type="checkbox" name="tags[]" value="technology" id="tag-technology" />
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+            </span>
+            <label for="tag-technology">Technology</label>
+        </div>
+
+        <!-- Art Checkbox -->
+        <div class="checkbox-wrapper-30 mt-1">
+            <span class="checkbox">
+                <input type="checkbox" name="tags[]" value="art" id="tag-art" />
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+            </span>
+            <label for="tag-art">Art</label>
+        </div>
+
+        <!-- Fun Checkbox -->
+        <div class="checkbox-wrapper-30 mt-1">
+            <span class="checkbox">
+                <input type="checkbox" name="tags[]" value="fun" id="tag-fun" />
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+            </span>
+            <label for="tag-fun">Fun</label>
+        </div>
+
+        <!-- Education Checkbox -->
+        <div class="checkbox-wrapper-30 mt-1">
+            <span class="checkbox">
+                <input type="checkbox" name="tags[]" value="education" id="tag-education" />
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+            </span>
+            <label for="tag-education">Education</label>
+        </div>
+
+        <!-- Kids Checkbox -->
+        <div class="checkbox-wrapper-30 mt-1">
+            <span class="checkbox">
+                <input type="checkbox" name="tags[]" value="kids" id="tag-kids" />
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+            </span>
+            <label for="tag-kids">Kids</label>
+        </div>
+
+        <!-- Business Checkbox -->
+        <div class="checkbox-wrapper-30 mt-1">
+            <span class="checkbox">
+                <input type="checkbox" name="tags[]" value="business" id="tag-business" />
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+            </span>
+            <label for="tag-business">Business</label>
+        </div>
+
+        <!-- Self Improvement Checkbox -->
+        <div class="checkbox-wrapper-30 mt-1">
+            <span class="checkbox">
+                <input type="checkbox" name="tags[]" value="selfImprovement" id="tag-selfImprovement" />
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+            </span>
+            <label for="tag-selfImprovement">Self Improvement</label>
+        </div>
+
+        <!-- Health Checkbox -->
+        <div class="checkbox-wrapper-30 mt-1">
+            <span class="checkbox">
+                <input type="checkbox" name="tags[]" value="health" id="tag-health" />
+                <svg>
+                    <use xlink:href="#checkbox-30" class="checkbox"></use>
+                </svg>
+            </span>
+            <label for="tag-health">Health</label>
+        </div>
+    </div>
+</div>
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="checkbox-30" viewBox="0 0 22 22">
+      <path fill="none" stroke="currentColor" d="M5.5,11.3L9,14.8L20.2,3.3l0,0c-0.5-1-1.5-1.8-2.7-1.8h-13c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h13 c1.7,0,3-1.3,3-3v-13c0-0.4-0.1-0.8-0.3-1.2"/>
+    </symbol>
+  </svg>
+
+<style>
+
+</style>
+
+<div class="col-md-4 pl-2">
+    <label for="dropdown">Audience:</label>
+    <div class="dropdown-btn">
+        <input type="checkbox" id="dropdown-toggle" />
+
+        <label class="dropdown__face" for="dropdown-toggle">
+            <div class="dropdown__text">Select Audience</div>
+            <div class="dropdown__arrow"></div>
+        </label>
+
+        <ul class="dropdown__items">
+            <li data-value="public">Public</li>
+            <li data-value="followers">Followers</li>
+        </ul>
+
+        <!-- Hidden select element for form submission -->
+        <select name="audience" id="audience-select" style="display:none;">
+            <option value="public">Public</option>
+            <option value="followers">Followers</option>
+        </select>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.dropdown__items li').forEach(item => {
+  item.addEventListener('click', () => {
+    const selectedValue = item.getAttribute('data-value');
+    document.querySelector('select[name="audience"]').value = selectedValue;
+    document.querySelector('.dropdown__text').textContent = item.textContent;
+    document.querySelector('#dropdown-toggle').checked = false;
+  });
+});
+</script>
+
         </div>
 
         <button type="submit" class="btn btn-primary" id="post-create-btn">Submit</button>

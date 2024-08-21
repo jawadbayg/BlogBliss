@@ -28,18 +28,32 @@ Route::get('/home', function () {
     return view('home', compact('userCount', 'postCount','pendingCount','pendingPost'));
 })->name('home');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::put('posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+});
+
+// No middleware applied to this route
+Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
+
 
 Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
-    Route::resource('posts', PostController::class);
 
    
     Route::post('users/{id}/accept', [UserController::class, 'accept'])->name('users.accept');
     Route::delete('users/{id}/reject', [UserController::class, 'reject'])->name('users.reject');
 });
+
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+
 Route::middleware(['auth'])->group(function () {
     Route::post('posts/{id}/approve', [PostController::class, 'approve'])->name('posts.approve');
     Route::post('posts/{id}/reject', [PostController::class, 'reject'])->name('posts.reject');

@@ -238,9 +238,14 @@ class PostController extends Controller
 
         public function show($id): View
         {
+            $suggestedPosts = Post::where('id', '!=', $id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+            $isAuthenticated = Auth::check();
             $post = Post::findOrFail($id);
-            $post->comments = $post->comments ?? []; // Ensure comments is an array
-            return view('posts.show', compact('post'));
+            $post->comments = $post->comments ?? []; 
+            return view('posts.show', compact('post', 'isAuthenticated','suggestedPosts'));
         }
 
     /**
@@ -434,7 +439,7 @@ class PostController extends Controller
         $post->status = 'published';
         $post->save();
     
-        Mail::to($post->user->email)->send(new PostStatusUpdate($post, 'approved'));
+
     
         return response()->json(['message' => 'Post approved successfully.']);
     }
@@ -445,7 +450,6 @@ class PostController extends Controller
         $post->status = 'rejected';
         $post->save();
     
-        Mail::to($post->user->email)->send(new PostStatusUpdate($post, 'rejected'));
     
         return response()->json(['message' => 'Post rejected successfully.']);
     }

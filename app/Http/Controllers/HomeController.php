@@ -96,7 +96,7 @@ class HomeController extends Controller
     public function showFeatured(): View
 {
     $featuredPost = Post::find(25); // Fetches the post with ID 25
-    return view('welcome', compact('featuredPost','admin.partials._users_management'));
+    return view('welcome', compact('featuredPost'));
 }
 
   
