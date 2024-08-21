@@ -3,27 +3,24 @@
 @section('content')
 <!-- Chat UI Container -->
 <div class="container mt-4 col-8">
-    <h2>AI Assistance</h2>
-    <div class="chat-container">
-        <div class="chat-box" id="chatBox">
-            <!-- Messages will be appended here -->
-        </div>
+    <h2>Write Blogs with AI</h2>
+       
         <form id="chatForm" class="chat-form">
             @csrf
             <div class="form-group">
-                <input type="text" class="form-control" name="message" id="message" placeholder="Enter your message" required>
+                <input type="text" class="form-control" name="message" id="message" placeholder="e.g,. write a 100 words blog on emerging technology" required>
             </div>
             <button type="submit" id="btn-AI">
     <i class="fa fa-paper-plane"></i>
 </button>
 
         </form>
-    </div>
+    
     <button id="stopButton" class="btn btn-danger mt-2" style="display: none;">Stop</button>
     </div>
 </div>
 
-<div class="container mt-4 col-8">
+<div class="container mt-1 col-8">
     <h2>Write Post</h2>
 
     <form id="postForm" action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
@@ -220,96 +217,87 @@ document.querySelectorAll('.dropdown__items li').forEach(item => {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    new FroalaEditor('#mytextarea', {
-        imageUploadURL: '{{ route('upload.froala') }}',
-        imageUploadParams: {
-            _token: '{{ csrf_token() }}' // Laravel's CSRF token
-        },
-    });
+  const froalaEditor = new FroalaEditor('#mytextarea', {
+    imageUploadURL: '{{ route('upload.froala') }}',
+    imageUploadParams: {
+      _token: '{{ csrf_token() }}' // Laravel's CSRF token
+    },
+  });
 
-    document.getElementById('chatForm').addEventListener('submit', function(event) {
+  document.getElementById('chatForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
     const formData = new FormData(this);
-    const userMessage = `<div class="chat-message user-message"><strong>You:</strong> ${formData.get('message')}</div>`;
 
     fetch('{{ route('flask.chat') }}', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': formData.get('_token') // Pass CSRF token
-        }
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': formData.get('_token') // Pass CSRF token
+      }
     })
-    .then(response => response.json())
-    .then(data => {
-        const chatBox = document.getElementById('chatBox');
-        const uniqueId = `response-${Date.now()}`; // Generate a unique ID for each response
-        const botResponse = formatResponse(data.response);
-        const botResponseContainer = `<div class="chat-message bot-response"><strong>AI:</strong> <span id="${uniqueId}" class="typing-container">${botResponse}</span></div>`;
-        chatBox.innerHTML += userMessage + botResponseContainer;
-        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
-        document.getElementById('message').value = ''; // Clear the input field
+      .then(response => response.json())
+      .then(data => {
+        const responseText = formatResponse(data.response);
 
         // Show Stop button
         document.getElementById('stopButton').style.display = 'inline-block';
 
-        // Apply typing animation to the bot's response
-        typeText(uniqueId);
-    })
-    .catch(error => console.error('Error:', error));
-});
+        // Apply typing animation to the Froala editor
+        typeTextInFroalaEditor(responseText, froalaEditor);
+      })
+      .catch(error => console.error('Error:', error));
+  });
 
-function formatResponse(response) {
+  function formatResponse(response) {
     let formattedResponse = response;
     formattedResponse = formattedResponse.replace(/^{\"response\":\"/, '');
     formattedResponse = formattedResponse.replace(/\"}$/, '');
-    // Handle line breaks and bold text
+    // Handle line breaks and bold text (unchanged)
     formattedResponse = formattedResponse.replace(/\\n/g, '<br>'); // For escaped newlines
     formattedResponse = formattedResponse.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Bold text
 
     return formattedResponse;
-}
+  }
 
-let typingInterval;
-function typeText(uniqueId) {
-    const container = document.getElementById(uniqueId); // Get the specific response container by ID
-    if (container) {
-        const text = container.innerHTML;
-        container.innerHTML = ''; // Clear the container before typing
-        let index = 0;
-        let typing = true;
+  function typeTextInFroalaEditor(text, editor) {
+    editor.html.set(''); // Clear the editor before typing
 
-        function type() {
-            if (index < text.length && typing) {
-                // Handle HTML tags while typing
-                if (text.charAt(index) === '<') {
-                    const tagEndIndex = text.indexOf('>', index);
-                    container.innerHTML += text.substring(index, tagEndIndex + 1);
-                    index = tagEndIndex + 1;
-                } else {
-                    container.innerHTML += text.charAt(index);
-                    index++;
-                }
-                typingInterval = setTimeout(type, 50); // Adjust the typing speed here
-            } else {
-                typing = false;
-                document.getElementById('stopButton').style.display = 'none'; // Hide the Stop button when done
-            }
+    let index = 0;
+    let typingInterval;
+
+    function type() {
+      if (index < text.length) {
+        let char = text.charAt(index);
+
+        // Handle line breaks
+        if (char === '\n') {
+          editor.html.insert('<br>', true); // Insert line break with <br>
+          index++;
+        } else {
+          editor.html.insert(char, true); // Insert character
+          index++;
         }
-        type();
-    }
-}
 
-// Stop typing animation
-document.getElementById('stopButton').addEventListener('click', function() {
+        typingInterval = setTimeout(type, 50); // Adjust typing speed if needed
+      } else {
+        clearTimeout(typingInterval);
+        document.getElementById('stopButton').style.display = 'none'; // Hide the Stop button when done
+      }
+    }
+
+    type();
+  }
+
+  document.getElementById('stopButton').addEventListener('click', function() {
     clearTimeout(typingInterval);
-    document.querySelectorAll('.typing-container').forEach(container => {
-        container.innerHTML = container.innerHTML; // Finalize and display the full text
-    });
-    this.style.display = 'none'; // Hide the Stop button
+    const editor = froalaEditor;
+    editor.html.set(froalaEditor.html.get()); 
+    this.style.display = 'none'; 
+  });
 });
-});
+
 </script>
 
 <style>
