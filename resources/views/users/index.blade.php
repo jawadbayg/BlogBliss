@@ -101,6 +101,47 @@ $(document).ready(function() {
         }
     });
 });
+
+function submitForm(userId, actionType) {
+    Swal.fire({
+        title: 'Please wait...',
+        text: 'Processing your request...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    let formId = (actionType === 'accept') ? 'acceptForm' + userId : 'rejectForm' + userId;
+    let form = document.getElementById(formId);
+
+    $.ajax({
+        url: form.action,
+        type: form.method,
+        data: $(form).serialize(),
+        success: function(response) {
+            Swal.fire({
+                title: 'Success!',
+                text: response.message,  
+                icon: 'success',
+                timer: 1000,
+                showConfirmButton: false
+            }).then(() => {
+               
+                $('#usersTable').DataTable().ajax.reload();
+            });
+        },
+        error: function(xhr) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Something went wrong. Please try again later.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
 function confirmDelete(userId) {
     Swal.fire({
         title: 'Are you sure?',
@@ -112,10 +153,45 @@ function confirmDelete(userId) {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            document.getElementById('deleteForm' + userId).submit();
-        }
-    })
-}
+            Swal.fire({
+                title: 'Please wait...',
+                text: 'Processing your request...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
+            let formId = 'deleteForm' + userId;
+            let form = document.getElementById(formId);
+
+            $.ajax({
+                url: form.action,
+                type: 'POST',
+                data: $(form).serialize(),
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: response.message, 
+                        icon: 'success',
+                        timer: 1000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        $('#usersTable').DataTable().ajax.reload();
+                    });
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong. Please try again later.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    });
+}
 </script>
+
 @endsection

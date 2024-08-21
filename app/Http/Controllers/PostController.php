@@ -10,7 +10,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;    
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
@@ -434,6 +434,8 @@ class PostController extends Controller
         $post->status = 'published';
         $post->save();
     
+        Mail::to($post->user->email)->send(new PostStatusUpdate($post, 'approved'));
+    
         return response()->json(['message' => 'Post approved successfully.']);
     }
     
@@ -443,8 +445,11 @@ class PostController extends Controller
         $post->status = 'rejected';
         $post->save();
     
+        Mail::to($post->user->email)->send(new PostStatusUpdate($post, 'rejected'));
+    
         return response()->json(['message' => 'Post rejected successfully.']);
     }
+    
     
     
 

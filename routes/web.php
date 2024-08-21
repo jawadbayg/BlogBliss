@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\FlaskApiController;
+use App\Http\Controllers\Auth\GoogleController;
 
 // In web.php
 
@@ -110,3 +111,7 @@ Route::get('/chat-form', function () {
 });
 
 Route::post('/chat', [FlaskApiController::class, 'chat'])->name('flask.chat');
+
+
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle']);
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);

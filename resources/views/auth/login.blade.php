@@ -58,6 +58,8 @@
                     <a href="{{ route('register') }}" class="btn btn-secondary" style="background-color: black;">Create new</a>
                   </div>
                 </form>
+                <!-- <a href="{{ url('auth/google') }}" class="btn btn-primary">Login with Google</a> -->
+
               </div>
             </div>
           </div>
