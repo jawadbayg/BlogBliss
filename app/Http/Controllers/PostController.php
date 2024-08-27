@@ -236,17 +236,25 @@ class PostController extends Controller
 
 
 
-        public function show($id): View
-        {
-            $suggestedPosts = Post::where('id', '!=', $id)
-            ->inRandomOrder()
-            ->take(4)
-            ->get();
-            $isAuthenticated = Auth::check();
-            $post = Post::findOrFail($id);
-            $post->comments = $post->comments ?? []; 
-            return view('posts.show', compact('post', 'isAuthenticated','suggestedPosts'));
-        }
+     public function show($id, $slug = null): View
+     {
+         $post = Post::findOrFail($id);
+     
+         
+         if ($slug && $slug !== $post->slug) {
+             abort(404); 
+         }
+     
+         $suggestedPosts = Post::where('id', '!=', $id)
+             ->inRandomOrder()
+             ->take(4)
+             ->get();
+         $isAuthenticated = Auth::check();
+         $post->comments = $post->comments ?? [];
+     
+         return view('posts.show', compact('post', 'isAuthenticated', 'suggestedPosts'));
+     }
+     
 
     /**
      * Show the form for editing the specified resource.

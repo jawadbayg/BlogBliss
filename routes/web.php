@@ -57,8 +57,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::delete('users/{id}/reject', [UserController::class, 'reject'])->name('users.reject');
 });
 
-Route::get('/users', [UserController::class, 'index']);
-
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/posts/{id}/{slug?}', [PostController::class, 'show'])->name('posts.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('posts/{id}/approve', [PostController::class, 'approve'])->name('posts.approve');

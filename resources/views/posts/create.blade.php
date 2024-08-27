@@ -40,106 +40,105 @@
         <div class="form-group d-flex justify-content-between" id="b-textarea">
         <div class="col-md-8 pr-2">
     <label>Tags:</label>
-    <div class="tags-checkboxes">
-        <!-- Science Checkbox -->
-        <div class="checkbox-wrapper-30 ">
-            <span class="checkbox">
-                <input type="checkbox" name="tags[]" value="science" id="tag-science" />
-                <svg>
-                    <use xlink:href="#checkbox-30" class="checkbox"></use>
-                </svg>
-            </span>
-            <label for="tag-science">Science</label>
+    <div class="row">
+        <!-- Column 1 -->
+        <div class="col-md-6">
+            <div class="checkbox-wrapper-30 mb-2">
+                <span class="checkbox">
+                    <input type="checkbox" name="tags[]" value="science" id="tag-science" />
+                    <svg>
+                        <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <label for="tag-science">Science</label>
+            </div>
+
+            <div class="checkbox-wrapper-30 mb-2">
+                <span class="checkbox">
+                    <input type="checkbox" name="tags[]" value="technology" id="tag-technology" />
+                    <svg>
+                        <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <label for="tag-technology">Technology</label>
+            </div>
+
+            <div class="checkbox-wrapper-30 mb-2">
+                <span class="checkbox">
+                    <input type="checkbox" name="tags[]" value="art" id="tag-art" />
+                    <svg>
+                        <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <label for="tag-art">Art</label>
+            </div>
+
+            <div class="checkbox-wrapper-30 mb-2">
+                <span class="checkbox">
+                    <input type="checkbox" name="tags[]" value="fun" id="tag-fun" />
+                    <svg>
+                        <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <label for="tag-fun">Fun</label>
+            </div>
+
+            <div class="checkbox-wrapper-30 mb-2">
+                <span class="checkbox">
+                    <input type="checkbox" name="tags[]" value="education" id="tag-education" />
+                    <svg>
+                        <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <label for="tag-education">Education</label>
+            </div>
         </div>
 
-        <!-- Technology Checkbox -->
-        <div class="checkbox-wrapper-30 mt-1">
-            <span class="checkbox">
-                <input type="checkbox" name="tags[]" value="technology" id="tag-technology" />
-                <svg>
-                    <use xlink:href="#checkbox-30" class="checkbox"></use>
-                </svg>
-            </span>
-            <label for="tag-technology">Technology</label>
-        </div>
+        <!-- Column 2 -->
+        <div class="col-md-6">
+            <div class="checkbox-wrapper-30 mb-2">
+                <span class="checkbox">
+                    <input type="checkbox" name="tags[]" value="kids" id="tag-kids" />
+                    <svg>
+                        <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <label for="tag-kids">Kids</label>
+            </div>
 
-        <!-- Art Checkbox -->
-        <div class="checkbox-wrapper-30 mt-1">
-            <span class="checkbox">
-                <input type="checkbox" name="tags[]" value="art" id="tag-art" />
-                <svg>
-                    <use xlink:href="#checkbox-30" class="checkbox"></use>
-                </svg>
-            </span>
-            <label for="tag-art">Art</label>
-        </div>
+            <div class="checkbox-wrapper-30 mb-2">
+                <span class="checkbox">
+                    <input type="checkbox" name="tags[]" value="business" id="tag-business" />
+                    <svg>
+                        <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <label for="tag-business">Business</label>
+            </div>
 
-        <!-- Fun Checkbox -->
-        <div class="checkbox-wrapper-30 mt-1">
-            <span class="checkbox">
-                <input type="checkbox" name="tags[]" value="fun" id="tag-fun" />
-                <svg>
-                    <use xlink:href="#checkbox-30" class="checkbox"></use>
-                </svg>
-            </span>
-            <label for="tag-fun">Fun</label>
-        </div>
+            <div class="checkbox-wrapper-30 mb-2">
+                <span class="checkbox">
+                    <input type="checkbox" name="tags[]" value="selfImprovement" id="tag-selfImprovement" />
+                    <svg>
+                        <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <label for="tag-selfImprovement">Self Improvement</label>
+            </div>
 
-        <!-- Education Checkbox -->
-        <div class="checkbox-wrapper-30 mt-1">
-            <span class="checkbox">
-                <input type="checkbox" name="tags[]" value="education" id="tag-education" />
-                <svg>
-                    <use xlink:href="#checkbox-30" class="checkbox"></use>
-                </svg>
-            </span>
-            <label for="tag-education">Education</label>
-        </div>
-
-        <!-- Kids Checkbox -->
-        <div class="checkbox-wrapper-30 mt-1">
-            <span class="checkbox">
-                <input type="checkbox" name="tags[]" value="kids" id="tag-kids" />
-                <svg>
-                    <use xlink:href="#checkbox-30" class="checkbox"></use>
-                </svg>
-            </span>
-            <label for="tag-kids">Kids</label>
-        </div>
-
-        <!-- Business Checkbox -->
-        <div class="checkbox-wrapper-30 mt-1">
-            <span class="checkbox">
-                <input type="checkbox" name="tags[]" value="business" id="tag-business" />
-                <svg>
-                    <use xlink:href="#checkbox-30" class="checkbox"></use>
-                </svg>
-            </span>
-            <label for="tag-business">Business</label>
-        </div>
-
-        <!-- Self Improvement Checkbox -->
-        <div class="checkbox-wrapper-30 mt-1">
-            <span class="checkbox">
-                <input type="checkbox" name="tags[]" value="selfImprovement" id="tag-selfImprovement" />
-                <svg>
-                    <use xlink:href="#checkbox-30" class="checkbox"></use>
-                </svg>
-            </span>
-            <label for="tag-selfImprovement">Self Improvement</label>
-        </div>
-
-        <!-- Health Checkbox -->
-        <div class="checkbox-wrapper-30 mt-1">
-            <span class="checkbox">
-                <input type="checkbox" name="tags[]" value="health" id="tag-health" />
-                <svg>
-                    <use xlink:href="#checkbox-30" class="checkbox"></use>
-                </svg>
-            </span>
-            <label for="tag-health">Health</label>
+            <div class="checkbox-wrapper-30 mb-2">
+                <span class="checkbox">
+                    <input type="checkbox" name="tags[]" value="health" id="tag-health" />
+                    <svg>
+                        <use xlink:href="#checkbox-30" class="checkbox"></use>
+                    </svg>
+                </span>
+                <label for="tag-health">Health</label>
+            </div>
         </div>
     </div>
+
+
 </div>
 
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
@@ -167,7 +166,6 @@
             <li data-value="followers">Followers</li>
         </ul>
 
-        <!-- Hidden select element for form submission -->
         <select name="audience" id="audience-select" style="display:none;">
             <option value="public">Public</option>
             <option value="followers">Followers</option>
@@ -224,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     let typingInterval; 
-    let isTypingStopped = false; // Flag to check if typing is stopped
+    let isTypingStopped = false; 
 
     document.getElementById('chatForm').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -232,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(this);
 
         const btnAI = document.getElementById('btn-AI');
-        btnAI.disabled = true; // Disable the button on submission
+        btnAI.disabled = true; 
         btnAI.style.backgroundColor = '#A9A9A9';
 
         fetch('{{ route('flask.chat') }}', {
@@ -249,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             document.getElementById('stopButton').style.display = 'inline-block';
 
-            // Ensure isTypingStopped is reset
+       
             isTypingStopped = false;
 
             typeTextInFroalaEditor(responseText, froalaEditor, btnAI);

@@ -1,29 +1,27 @@
 <?php
 
-// App\Models\Post.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
     use HasFactory;
 
-
+    // Add 'slug' to the fillable attributes
     protected $fillable = [
-        'user_id', 'title', 'text', 'images', 'likes', 'comments', 'tags', 'status', 'audience'
+        'user_id', 'title', 'text', 'images', 'likes', 'comments', 'tags', 'status', 'audience', 'slug'
     ];
 
-  
-
+    // Add 'slug' to the casts if needed
     protected $casts = [
-        'likes' => 'array', // Assuming likes are stored as a JSON array
-        'comments' => 'array', 
+        'likes' => 'array',
+        'comments' => 'array',
         'status' => 'string',
         'images' => 'string',
+        'slug' => 'string', // Ensure slug is cast to string if needed
     ];
 
     public function user()
@@ -59,5 +57,23 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class)->orderBy('created_at', 'desc');
     }
-    
+
+    // Automatically generate a slug when creating a post
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($post) {
+            if (empty($post->slug)) {
+                $slug = Str::slug($post->title, '-');
+                $post->slug = $slug;
+
+                // Ensure slug is unique
+                $count = 1;
+                while (self::where('slug', $post->slug)->exists()) {
+                    $post->slug = $slug . '-' . $count++;
+                }
+            }
+        });
+    }
 }

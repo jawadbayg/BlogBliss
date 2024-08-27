@@ -30,15 +30,26 @@
                             @endif
                         @endauth
                         <div class="share-button-container">
-                            <button class="btn btn-light" onclick="copyPostLink('{{ url('posts/' . $post->id) }}')">
-                                <i class="fa fa-share-alt"></i> 
+                            <button class="btn btn-light" onclick="copyPostLink('{{ url('posts/' . $post->id . '/' . $post->slug) }}')">
+                                <i class="fa fa-share-alt"></i>
                             </button>
                             <div id="copy-tooltip" class="copy-tooltip">Link copied <i class="fa fa-check"></i></div> <!-- Custom pop-up message -->
                         </div>
+
                     </div>
                 </p>
                 <h1 class="post-title-show">{{ $post->title }}</h1>
-                <p><strong>Tags:</strong> {{ $post->tags }}</p>
+                <p><strong>Tags:</strong> 
+                    @if($post->tags)
+                        @foreach(explode(',', $post->tags) as $tag)
+                            <span class="badge bg-dark badge-large me-1">{{ trim($tag) }}</span>
+                        @endforeach
+                    @else
+                        <span class="badge bg-secondary badge-large">No tags</span>
+                    @endif
+                </p>
+
+
                 <div class="post-text-show">
                     <p>{!! $post->text !!}</p>
                 </div>
@@ -60,7 +71,14 @@
                             @endforelse
                         </div>
                     </div>
-
+                    <style>
+                         .badge-large {
+    font-size: 12px;
+    padding: 6px;
+    background-color:black;
+    
+}
+</style>
                     <!-- Comments Section -->
                     <div class="comments-section mt-4">
                         <h4>Comments</h4>
@@ -178,7 +196,7 @@
 </div>
 
 <script>
-  function copyPostLink(url) {
+ function copyPostLink(url) {
     var tempInput = document.createElement('input');
     document.body.appendChild(tempInput);
     tempInput.value = url;
