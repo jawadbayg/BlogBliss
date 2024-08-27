@@ -105,7 +105,6 @@
     <h5 id="sidebar-headings">Recommended topics</h5>
     
     @if(request('tag'))
-        <!-- Clear Filter Button -->
         <a href="{{ route('posts.index') }}" class="sidebar-button clear-filter-button">
     Clear Filter
 </a>

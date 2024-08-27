@@ -16,7 +16,7 @@
 
         </form>
     
-    <button id="stopButton" class="btn btn-danger mt-2" style="display: none;">Stop</button>
+   
     </div>
 </div>
 
@@ -35,6 +35,7 @@
             <label for="text">Text:</label>
             <textarea id="mytextarea" class="form-control" name="text" placeholder="Enter post text" required></textarea>
         </div>
+        <button id="stopButton" class="btn btn-danger mt-2" style="display: none;">Stop</button>
 
         <div class="form-group d-flex justify-content-between" id="b-textarea">
         <div class="col-md-8 pr-2">
@@ -209,94 +210,108 @@ document.querySelectorAll('.dropdown__items li').forEach(item => {
     @endif
 </div>
 
-<!-- Include Froala Editor style -->
-<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
 
-<!-- Include Froala Editor JS -->
+<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const froalaEditor = new FroalaEditor('#mytextarea', {
-    imageUploadURL: '{{ route('upload.froala') }}',
-    imageUploadParams: {
-      _token: '{{ csrf_token() }}' // Laravel's CSRF token
-    },
-  });
+    const froalaEditor = new FroalaEditor('#mytextarea', {
+        imageUploadURL: '{{ route('upload.froala') }}',
+        imageUploadParams: {
+            _token: '{{ csrf_token() }}'
+        },
+    });
 
-  document.getElementById('chatForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+    let typingInterval; 
+    let isTypingStopped = false; // Flag to check if typing is stopped
 
-    const formData = new FormData(this);
+    document.getElementById('chatForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-    fetch('{{ route('flask.chat') }}', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRF-TOKEN': formData.get('_token') // Pass CSRF token
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        const responseText = formatResponse(data.response);
+        const formData = new FormData(this);
 
-        // Show Stop button
-        document.getElementById('stopButton').style.display = 'inline-block';
+        const btnAI = document.getElementById('btn-AI');
+        btnAI.disabled = true; // Disable the button on submission
+        btnAI.style.backgroundColor = '#A9A9A9';
 
-        // Apply typing animation to the Froala editor
-        typeTextInFroalaEditor(responseText, froalaEditor);
-      })
-      .catch(error => console.error('Error:', error));
-  });
+        fetch('{{ route('flask.chat') }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': formData.get('_token') 
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const responseText = formatResponse(data.response);
 
-  function formatResponse(response) {
-    let formattedResponse = response;
-    formattedResponse = formattedResponse.replace(/^{\"response\":\"/, '');
-    formattedResponse = formattedResponse.replace(/\"}$/, '');
-    // Handle line breaks and bold text (unchanged)
-    formattedResponse = formattedResponse.replace(/\\n/g, '<br>'); // For escaped newlines
-    formattedResponse = formattedResponse.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Bold text
+            document.getElementById('stopButton').style.display = 'inline-block';
 
-    return formattedResponse;
-  }
+            // Ensure isTypingStopped is reset
+            isTypingStopped = false;
 
-  function typeTextInFroalaEditor(text, editor) {
-    editor.html.set(''); // Clear the editor before typing
+            typeTextInFroalaEditor(responseText, froalaEditor, btnAI);
+             
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            btnAI.disabled = false;
+            btnAI.style.backgroundColor = ''; // Reset button color on error
+        });
+    });
 
-    let index = 0;
-    let typingInterval;
+    function formatResponse(response) {
+        // Remove outer quotation marks and handle line breaks
+        let formattedResponse = response
+            .replace(/^{\"response\":\"/, '')
+            .replace(/\"}$/, '')
+            .replace(/\\n/g, '\n'); // Convert \n to actual newlines
 
-    function type() {
-      if (index < text.length) {
-        let char = text.charAt(index);
+        // Remove **bold** markers without embedding them
+        formattedResponse = formattedResponse.replace(/\*\*(.*?)\*\*/g, '$1');
 
-        // Handle line breaks
-        if (char === '\n') {
-          editor.html.insert('<br>', true); // Insert line break with <br>
-          index++;
-        } else {
-          editor.html.insert(char, true); // Insert character
-          index++;
-        }
-
-        typingInterval = setTimeout(type, 50); // Adjust typing speed if needed
-      } else {
-        clearTimeout(typingInterval);
-        document.getElementById('stopButton').style.display = 'none'; // Hide the Stop button when done
-      }
+        return formattedResponse;
     }
 
-    type();
-  }
+    function typeTextInFroalaEditor(text, editor, btnAI) {
+        let index = 0;
 
-  document.getElementById('stopButton').addEventListener('click', function() {
-    clearTimeout(typingInterval);
-    const editor = froalaEditor;
-    editor.html.set(froalaEditor.html.get()); 
-    this.style.display = 'none'; 
-  });
+        function type() {
+            if (index < text.length && !isTypingStopped) {
+                let char = text.charAt(index);
+
+                // Handle line breaks
+                if (char === '\n') {
+                    editor.html.insert('<br>', true); 
+                    index++;
+                } else {
+                    editor.html.insert(char, true); 
+                    index++;
+                }
+
+                typingInterval = setTimeout(type, 30); 
+            } else {
+                clearTimeout(typingInterval);
+                document.getElementById('stopButton').style.display = 'none'; 
+                btnAI.disabled = false;
+                btnAI.style.backgroundColor = ''; // Reset button color
+            }
+        }
+
+        type();
+    }
+
+    document.getElementById('stopButton').addEventListener('click', function() {
+        clearTimeout(typingInterval);
+        isTypingStopped = true; // Set the flag to true when typing is stopped
+        this.style.display = 'none'; 
+        document.getElementById('btn-AI').disabled = false; // Re-enable the button when stopped
+        document.getElementById('btn-AI').style.backgroundColor = ''; // Reset button color
+    });
 });
+
 
 </script>
 
@@ -307,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        height: 400px; /* Adjust the height as needed */
+        height: 400px; 
     }
     .chat-box {
         flex: 1;

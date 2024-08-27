@@ -101,27 +101,29 @@
                 @endif
             </div>
        
-        <div class="suggested-posts mt-4">
+           
+
+    @if(Auth::check())
+    <div class="suggested-posts mt-4">
     <h4>More Posts You Might Like</h4>
     <div class="row">
         @foreach ($suggestedPosts as $suggestedPost)
         <div class="col-md-5 mb-3 mx-4">
- 
-                <a href="{{ route('posts.show', $suggestedPost->id) }}" class="post-card-title-link">
+            <a href="{{ route('posts.show', $suggestedPost->id) }}" class="post-card-title-link">
                 <h5 class="post-card-title">{{ $suggestedPost->title }}</h5>
-                </a>
-                <div class="post-card-user">
-                    @if ($suggestedPost->user->profile_pic)
-                        <img src="{{ asset('storage/' . $suggestedPost->user->profile_pic) }}" alt="User Image" class="user-avatar">
-                    @else
-                        <img src="{{ asset('storage/profile_pics/default-avatar.png') }}" alt="Default Avatar" class="user-avatar">
-                    @endif
-                    <span class="user-name">{{ $suggestedPost->user->name }}</span>
-                </div>
+            </a>
+            <div class="post-card-user">
+                @if ($suggestedPost->user->profile_pic)
+                    <img src="{{ asset('storage/' . $suggestedPost->user->profile_pic) }}" alt="User Image" class="user-avatar">
+                @else
+                    <img src="{{ asset('storage/profile_pics/default-avatar.png') }}" alt="Default Avatar" class="user-avatar">
+                @endif
+                <span class="user-name">{{ $suggestedPost->user->name }}</span>
             </div>
+        </div>
         @endforeach
     </div>
-    @if(Auth::check())
+</div>
     <a href="{{ route('posts.index') }}" " id="seemore">See more Recommendations</a>
     @endif
 </div>
@@ -184,14 +186,12 @@
     document.execCommand('copy');
     document.body.removeChild(tempInput);
 
-    // Show the custom pop-up message
     var popup = document.getElementById('copy-tooltip');
     popup.style.display = 'block';
 
-    // Hide the pop-up message after a short delay
     setTimeout(function() {
         popup.style.display = 'none';
-    }, 1000); // 2 seconds
+    }, 1000);
 }
 
 

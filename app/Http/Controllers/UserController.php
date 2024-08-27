@@ -29,46 +29,34 @@ class UserController extends Controller
      */
 
      public function index(Request $request)
-     {
-         if ($request->ajax()) {
-             $data = User::latest()->get();
-             return DataTables::of($data)
-                 ->addIndexColumn()
-                 ->addColumn('roles', function ($user) {
-                     return $user->getRoleNames()->map(function ($role) {
-                         return '<label class="badge bg-success">' . $role . '</label>';
-                     })->implode(' ');
-                 })
-                 ->addColumn('status', function ($user) {
-                     return $user->isFalse ? '<span class="badge bg-success">Accepted</span>' : '<span class="badge bg-warning">Pending</span>';
-                 })
-                 ->addColumn('action', function ($user) {
-                    $acceptButton = !$user->isFalse ? '<form id="acceptForm' . $user->id . '" method="POST" action="' . route('users.accept', $user->id) . '" style="display:inline">
-                        ' . csrf_field() . '
-                        <button type="button" class="btn btn-success btn-sm" onclick="submitForm(\'' . $user->id . '\', \'accept\')"><i class="fa-solid fa-check"></i> Accept</button>
-                    </form>' : '';
-                
-                    $rejectButton = !$user->isFalse ? '<form id="rejectForm' . $user->id . '" method="POST" action="' . route('users.reject', $user->id) . '" style="display:inline">
-                        ' . csrf_field() . '
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="button" class="btn btn-danger btn-sm" onclick="submitForm(\'' . $user->id . '\', \'reject\')"><i class="fa-solid fa-xmark"></i> Reject</button>
-                    </form>' : '';
-                
-                    $showButton = '<a class="btn btn-primary btn-sm" href="' . route('users.show', $user->id) . '"><i class="fa fa-eye"></i> Show</a>';
-                    $editButton = '<a class="btn btn-info btn-sm" href="' . route('users.edit', $user->id) . '"><i class="fa fa-pencil"></i> Edit</a>';
-                    $deleteButton = '<form id="deleteForm' . $user->id . '" method="POST" action="' . route('users.destroy', $user->id) . '" style="display:inline">
-                        ' . csrf_field() . '
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(\'' . $user->id . '\')"><i class="fa fa-trash"></i> Delete</button>
-                    </form>';
-                
-                    return $acceptButton . $rejectButton . $showButton . $editButton . $deleteButton;
+    {
+        $data = User::latest()->get();
+
+        return response()->json([
+            'data' => DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('roles', function ($user) {
+                    return $user->getRoleNames()->map(function ($role) {
+                        return $role;
+                    });
                 })
-                
-                
-                 ->rawColumns(['roles', 'status', 'action'])
-                 ->make(true);
-         }
+                ->addColumn('status', function ($user) {
+                    return $user->isFalse ? 'Accepted' : 'Pending';
+                })
+                ->addColumn('action', function ($user) {
+                    return [
+                        'accept' => !$user->isFalse,
+                        'reject' => !$user->isFalse,
+                        'show' => route('users.show', $user->id),
+                        'edit' => route('users.edit', $user->id),
+                        'delete' => route('users.destroy', $user->id)
+                    ];
+                })
+                ->make(true)
+                ->getData()
+        ]);
+         
+          
          
          $data = User::latest()->paginate(1);
          $chartData = User::withCount('posts')->get()->map(function ($user) {
@@ -158,11 +146,8 @@ class UserController extends Controller
     
     public function getPendingCount()
     {
-        // Get the count of users where 'isFalse' is 0
         $pendingCount = User::where('isFalse', 0)->count();
-
-        // Return the count as a JSON response
-        return $pendingCount;
+        return response()->json(['pendingCount' => $pendingCount]);
     }
     /**
      * Show the form for editing the specified resource.
@@ -331,14 +316,13 @@ class UserController extends Controller
 
 
     public function getUserCount()
-    {
+    {   
         $userCount = User::count();
-        return $userCount;
+        return response()->json(['userCount' => $userCount]);
     }
 
     public function pendingRequests(Request $request): View
     {
-        // Fetch users with isFalse = false and status = pending
         $data = User::where('isFalse', false)
                     ->where('status', 'pending')
                     ->latest()

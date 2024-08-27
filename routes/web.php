@@ -17,6 +17,12 @@ Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('about-us');
 
 
+Route::get('/user-count', [UserController::class, 'getUserCount']);
+Route::get('/post-count', [PostController::class, 'getPostCount']);
+Route::get('/pending-users', [UserController::class, 'getPendingCount']);
+Route::get('/pending-posts', [PostController::class, 'getPendingPosts']);
+
+
 
 Auth::routes();
 
@@ -51,7 +57,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::delete('users/{id}/reject', [UserController::class, 'reject'])->name('users.reject');
 });
 
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users', [UserController::class, 'index']);
 
 
 Route::middleware(['auth'])->group(function () {

@@ -460,7 +460,7 @@ class PostController extends Controller
     public function getPostCount()
     {
         $postCount = Post::count();
-        return $postCount;
+        return response()->json(['postCount' => $postCount]);
     }
 
     public function getTopLikedPosts()
@@ -501,11 +501,8 @@ public function uploadImage(Request $request)
 
 public function getPendingPosts()
 {
-    // Get the count of users where 'isFalse' is 0
     $pendingPost = Post::where('status', 'pending')->count();
-
-    // Return the count as a JSON response
-    return $pendingPost;
+    return response()->json(['pendingPost' => $pendingPost]);
 }
 
 

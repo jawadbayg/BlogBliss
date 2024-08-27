@@ -145,10 +145,11 @@
                                     <a class="nav-link" href="{{ route('posts.userIndex') }}">My Posts</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('posts.create') }}">
-                                        <i class="fas fa-pencil-alt"></i> Write
-                                    </a>
-                                </li>
+    <a class="nav-link" href="{{ route('posts.create') }}">
+        <i class="fa-solid fa-pen-to-square fa-xl" style="margin-right: 2px;"></i>Write
+    </a>
+</li>
+
                             @endif
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
