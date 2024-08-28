@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class FlaskApiController extends Controller
 {
-    private $apiUrl = 'https://65d5-34-125-236-208.ngrok-free.app/chat'; // Your Ngrok URL
+    private $apiUrl = 'https://b6bd-35-237-201-199.ngrok-free.app/chat'; // Your Ngrok URL
 
     public function chat(Request $request)
     {

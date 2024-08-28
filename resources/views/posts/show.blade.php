@@ -15,7 +15,8 @@
                             @endif
                             <strong>{{ $post->user->name }}</strong> - {{ $post->created_at->format('F j, Y') }}
                         </div>
-                        @auth
+                        @if(Auth::check() && !Auth::user()->hasRole('Admin'))
+                        @if (Auth::id() !== $post->user->id) 
                             @if (Auth::user()->isFollowing($post->user))
                                 <form action="{{ route('users.unfollow', $post->user->id) }}" method="POST" style="margin-left: auto;">
                                     @csrf
@@ -28,6 +29,8 @@
                                     <button type="submit" class="btn btn-sm" id="follow-btn">+ Follow</button>
                                 </form>
                             @endif
+                            @endif
+                        
                         @endauth
                         <div class="share-button-container">
                             <button class="btn btn-light" onclick="copyPostLink('{{ url('posts/' . $post->id . '/' . $post->slug) }}')">
@@ -53,97 +56,118 @@
                 <div class="post-text-show">
                     <p>{!! $post->text !!}</p>
                 </div>
-
-                @if(Auth::check())
-                    <!-- Like/Unlike Button -->
-                    <div class="like-container">
-                        <i id="like-icon" data-post-id="{{ $post->id }}" class="fas fa-thumbs-up {{ in_array(auth()->id(), json_decode($post->likes, true) ?? []) ? 'liked' : '' }}"></i>
-                        <span id="like-count">{{ count(json_decode($post->likes, true) ?? []) }}</span>
-                        <div id="likes-tooltip" class="likes-tooltip">
-                            @forelse (json_decode($post->likes, true) ?? [] as $userId)
-                                @if($user = App\Models\User::find($userId))
-                                    <span class="badge badge-custom-blue">{{ $user->name }}</span><br>
-                                @else
-                                    <span class="badge badge-danger">Unknown User</span><br>
-                                @endif
-                            @empty
-                                <span>No likes yet.</span>
-                            @endforelse
-                        </div>
-                    </div>
-                    <style>
-                         .badge-large {
-    font-size: 12px;
-    padding: 6px;
-    background-color:black;
-    
-}
-</style>
-                    <!-- Comments Section -->
-                    <div class="comments-section mt-4">
-                        <h4>Comments</h4>
-                        <div id="comments-list">
-                            @foreach ($post->comments as $comment)
-                                <div class="comment mb-2">
-                                    <div class="d-flex align-items-center">
-                                        @php 
-                                            $commentUser = is_array($comment) ? App\Models\User::find($comment['user_id']) : $comment->user;
-                                        @endphp
-                                        @if($commentUser)
-                                            <img src="{{ $commentUser->profile_pic ? asset('storage/' . $commentUser->profile_pic) : asset('storage/profile_pics/default-avatar.png') }}" alt="User Image" class="user-avatar mr-2">
-                                            <strong>{{ $commentUser->name }}</strong> 
-                                        @else
-                                            <img src="{{ asset('storage/profile_pics/default-avatar.png') }}" alt="Default Avatar" class="user-avatar mr-2">
-                                            <strong>Unknown User</strong> 
-                                        @endif
-                                        <span class="text-muted">{{ \Carbon\Carbon::parse($comment['created_at'])->diffForHumans() }}</span>
-                                    </div>
-                                    <p>{{ $comment['text'] }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-                        <form id="comment-form" method="POST">
-                            @csrf
-                            <input type="hidden" name="post_id" value="{{ $post->id }}">
-                            <div class="form-group">
-                                <textarea name="text" class="form-control" placeholder="Add a comment..." required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary" id="btn-comment">Submit</button>
-                        </form>
-                    </div>
+                
+                <div class="post-interaction">
+    <!-- Like/Unlike Button -->
+    <div class="like-container">
+        <i id="like-icon" 
+           data-post-id="{{ $post->id }}" 
+           class="fas fa-thumbs-up {{ in_array(auth()->id(), json_decode($post->likes, true) ?? []) ? 'liked' : '' }} {{ Auth::check() ? '' : 'non-clickable' }}"
+           style="{{ Auth::check() ? '' : 'color: grey;' }}"></i>
+        <span id="like-count">{{ count(json_decode($post->likes, true) ?? []) }}</span>
+        <div id="likes-tooltip" class="likes-tooltip">
+            @forelse (json_decode($post->likes, true) ?? [] as $userId)
+                @if($user = App\Models\User::find($userId))
+                    <span class="badge badge-custom-blue">{{ $user->name }}</span><br>
                 @else
-                    <!-- Restricted Content for Unauthenticated Users -->
-                    <div class="restricted-content">
-                        <p>You must be <a href="{{ route('login') }}">logged in</a> to like and comment on this post.</p>
-                    </div>
+                    <span class="badge badge-danger">Unknown User</span><br>
                 @endif
-            </div>
+            @empty
+                <span>No likes yet.</span>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="comments-section mt-4">
+        <h4>Comments</h4>
+        <div id="comments-list">
+            @foreach ($post->comments as $comment)
+                <div class="comment mb-2">
+                    <div class="d-flex align-items-center">
+                        @php 
+                            $commentUser = is_array($comment) ? App\Models\User::find($comment['user_id']) : $comment->user;
+                        @endphp
+                        @if($commentUser)
+                            <img src="{{ $commentUser->profile_pic ? asset('storage/' . $commentUser->profile_pic) : asset('storage/profile_pics/default-avatar.png') }}" alt="User Image" class="user-avatar mr-2">
+                            <strong>{{ $commentUser->name }}</strong> 
+                        @else
+                            <img src="{{ asset('storage/profile_pics/default-avatar.png') }}" alt="Default Avatar" class="user-avatar mr-2">
+                            <strong>Unknown User</strong> 
+                        @endif
+                        <span class="text-muted">{{ \Carbon\Carbon::parse($comment['created_at'])->diffForHumans() }}</span>
+                    </div>
+                    <p>{{ $comment['text'] }}</p>
+                </div>
+            @endforeach
+        </div>
+
+        @if(Auth::check())
+           
+            <form id="comment-form" method="POST">
+                @csrf
+                <input type="hidden" name="post_id" value="{{ $post->id }}">
+                <div class="form-group">
+                    <textarea name="text" class="form-control" placeholder="Add a comment..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-comment">Submit</button>
+            </form>
+        @else
+            
+            <div class="greyed-out">
+            <div class="text-center mb-4">
+                <p>You must login first for full access</p>
+    <a href="{{ route('login') }}" style="display: block; width: 100%; background-color: black; color: white; border: none; padding: 10px; text-align: center; text-decoration:none;">
+        Log in
+    </a>
+</div>
+      
+        </div>
+        @endif
+       
+       
+    </div>
+</div>
+
+<style>
+    .non-clickable {
+        pointer-events: none;
+        color: grey;
+    }
+    .greyed-out textarea {
+        background-color: #f0f0f0;
+        color: grey;
+        border: 1px solid grey;
+    }
+</style>
+
        
            
 
-    @if(Auth::check())
+@if(Auth::check() && !Auth::user()->hasRole('Admin'))
     <div class="suggested-posts mt-4">
-    <h4>More Posts You Might Like</h4>
-    <div class="row">
-        @foreach ($suggestedPosts as $suggestedPost)
-        <div class="col-md-5 mb-3 mx-4">
-            <a href="{{ route('posts.show', $suggestedPost->id) }}" class="post-card-title-link">
-                <h5 class="post-card-title">{{ $suggestedPost->title }}</h5>
-            </a>
-            <div class="post-card-user">
-                @if ($suggestedPost->user->profile_pic)
-                    <img src="{{ asset('storage/' . $suggestedPost->user->profile_pic) }}" alt="User Image" class="user-avatar">
-                @else
-                    <img src="{{ asset('storage/profile_pics/default-avatar.png') }}" alt="Default Avatar" class="user-avatar">
-                @endif
-                <span class="user-name">{{ $suggestedPost->user->name }}</span>
-            </div>
+        <h4>More Posts You Might Like</h4>
+        <div class="row">
+            @foreach ($suggestedPosts as $suggestedPost)
+                <div class="col-md-5 mb-3 mx-4">
+                    <a href="{{ route('posts.show', $suggestedPost->id) }}" class="post-card-title-link">
+                        <h5 class="post-card-title">{{ $suggestedPost->title }}</h5>
+                    </a>
+                    <div class="post-card-user">
+                        @if ($suggestedPost->user->profile_pic)
+                            <img src="{{ asset('storage/' . $suggestedPost->user->profile_pic) }}" alt="User Image" class="user-avatar">
+                        @else
+                            <img src="{{ asset('storage/profile_pics/default-avatar.png') }}" alt="Default Avatar" class="user-avatar">
+                        @endif
+                        <span class="user-name">{{ $suggestedPost->user->name }}</span>
+                    </div>
+                </div>
+            @endforeach
         </div>
-        @endforeach
     </div>
-</div>
-    <a href="{{ route('posts.index') }}" " id="seemore">See more Recommendations</a>
-    @endif
+    <a href="{{ route('posts.index') }}" id="seemore">See more Recommendations</a>
+@endif
+
 </div>
 </div>
 
@@ -154,16 +178,16 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 1.5em;
     margin-bottom: 0.5em;
-    color: black; /* Ensure text color is black */
-    text-decoration: none; /* Remove underline */
+    color: black; 
+    text-decoration: none; 
 }
 .post-card-title a {
-    color: black; /* Ensure link color is black */
-    text-decoration: none; /* Remove underline from links */
+    color: black;
+    text-decoration: none; 
 }
 
 .post-card-title a:hover {
-    text-decoration: underline; /* Add underline on hover */
+    text-decoration: underline; 
 }
     .post-card-user {
         display: flex;

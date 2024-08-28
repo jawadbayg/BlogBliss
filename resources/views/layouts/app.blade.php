@@ -141,14 +141,16 @@
                             @if(Auth::user()->hasRole('Admin'))
                                 <!-- Admin specific links -->
                             @else
+                                 @if(Auth::check() && Auth::user()->isFalse)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('posts.userIndex') }}">My Posts</a>
                                 </li>
                                 <li class="nav-item">
-    <a class="nav-link" href="{{ route('posts.create') }}">
-        <i class="fa-solid fa-pen-to-square fa-xl" style="margin-right: 2px;"></i>Write
-    </a>
-</li>
+                                    <a class="nav-link" href="{{ route('posts.create') }}">
+                                        <i class="fa-solid fa-pen-to-square fa-xl" style="margin-right: 2px;"></i>Write
+                                    </a>    
+                                </li>   
+                                @endif
 
                             @endif
                             <li class="nav-item dropdown">

@@ -353,7 +353,8 @@ class PostController extends Controller
         // Delete the post
         $post->delete();
     
-        return response()->json(['success' => 'Post deleted successfully.']);
+        return redirect()->route('posts.userIndex')->with('success', 'Post deleted successfully.');
+
     }
     
 
@@ -371,10 +372,10 @@ class PostController extends Controller
         $likes = json_decode($post->likes, true) ?? [];
         
         if (in_array($userId, $likes)) {
-            // Unlike
+            
             $likes = array_diff($likes, [$userId]);
         } else {
-            // Like
+        
             $likes[] = $userId;
         }
     
@@ -468,22 +469,17 @@ class PostController extends Controller
     public function getPostCount()
     {
         $postCount = Post::count();
-        return response()->json(['postCount' => $postCount]);
+        return $postCount;
     }
 
     public function getTopLikedPosts()
     {
-        $posts = Post::all(); // Retrieve all posts
-    
-        // Sort posts by the number of likes (assuming likes are stored as a JSON array)
+        $posts = Post::all(); 
         $posts = $posts->sortByDesc(function($post) {
             $likes = json_decode($post->likes, true) ?? [];
             return count($likes);
         });
-    
-        // Get the top 3 posts
         $topLikedPosts = $posts->take(3);
-    
         return $topLikedPosts;
     }
     
@@ -510,7 +506,7 @@ public function uploadImage(Request $request)
 public function getPendingPosts()
 {
     $pendingPost = Post::where('status', 'pending')->count();
-    return response()->json(['pendingPost' => $pendingPost]);
+    return $pendingPost;
 }
 
 

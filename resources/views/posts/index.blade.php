@@ -4,8 +4,6 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 @if(Auth::user()->hasRole('User'))
-<!-- Floating Button -->
-<!-- Floating Button -->
 <a id="chatbot-toggle" href="{{ route('posts.create') }}" class="floating-button">
   Get Help from AI
 </a>
@@ -57,19 +55,22 @@
 
                                 <!-- Follow/Unfollow Button -->
                                 @auth
-                                    @if (Auth::user()->isFollowing($post->user))
-                                        <form action="{{ route('users.unfollow', $post->user->id) }}" method="POST" style="margin-left: auto;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm" id="unfollow-btn">✓ Following</button>
-                                        </form>
-                                    @else
-                                        <form action="{{ route('users.follow', $post->user->id) }}" method="POST" style="margin-left: auto;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm" id="follow-btn">+ Follow</button>
-                                        </form>
+                                    @if (Auth::id() !== $post->user->id) 
+                                        @if (Auth::user()->isFollowing($post->user))
+                                            <form action="{{ route('users.unfollow', $post->user->id) }}" method="POST" style="margin-left: auto;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm" id="unfollow-btn">✓ Following</button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('users.follow', $post->user->id) }}" method="POST" style="margin-left: auto;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm" id="follow-btn">+ Follow</button>
+                                            </form>
+                                        @endif
                                     @endif
                                 @endauth
+
                             </p>
 
                             <h3 class="post-title">{{ $post->title }}</h3>

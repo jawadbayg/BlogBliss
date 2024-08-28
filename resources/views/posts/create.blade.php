@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     index++;
                 }
 
-                typingInterval = setTimeout(type, 30); 
+                typingInterval = setTimeout(type, 20); 
             } else {
                 clearTimeout(typingInterval);
                 document.getElementById('stopButton').style.display = 'none'; 

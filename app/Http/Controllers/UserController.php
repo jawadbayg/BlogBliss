@@ -158,7 +158,7 @@ class UserController extends Controller
     public function getPendingCount()
     {
         $pendingCount = User::where('isFalse', 0)->count();
-        return response()->json(['pendingCount' => $pendingCount]);
+        return $pendingCount;
     }
     /**
      * Show the form for editing the specified resource.
@@ -329,7 +329,7 @@ class UserController extends Controller
     public function getUserCount()
     {   
         $userCount = User::count();
-        return response()->json(['userCount' => $userCount]);
+        return $userCount;
     }
 
     public function pendingRequests(Request $request): View
