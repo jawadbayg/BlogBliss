@@ -7,21 +7,21 @@ use Illuminate\Support\Facades\Http;
 
 class FlaskApiController extends Controller
 {
-    private $apiUrl = 'https://b6bd-35-237-201-199.ngrok-free.app/chat'; // Your Ngrok URL
+    private $apiUrl = 'https://ddaf-34-83-45-38.ngrok-free.app/chat'; 
 
     public function chat(Request $request)
     {
-        // Validate incoming request
+        
         $request->validate([
             'message' => 'required|string',
         ]);
 
-        // Send request to Flask API
+        
         $response = Http::withoutVerifying()->post($this->apiUrl, [
             'message' => $request->input('message'),
         ]);
 
-        // Return the response from Flask API as JSON
+       
         return response()->json(['response' => $response->body()]);
     }
 }
